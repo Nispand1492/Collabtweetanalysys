@@ -7,7 +7,7 @@ from tweepy.streaming import StreamListener
 import datetime
 from tweet_class import Tweet
 import pickle
-
+from collections import deque
 def get_tweet(user,id,maxid):
     res = api.search(q=user,count=100,since_id=id,max_id = maxid)
     return res
@@ -17,7 +17,7 @@ def format_dat(time_str):
     return t
 
 def get_all_child(root):
-    f = open("Output.txt",'a')
+    f = open("Outputtest.txt",'a')
     flag = True
     id = root.tweet_data['tweet_id']
     cnt = 0
@@ -73,31 +73,35 @@ def get_all_child(root):
     return "success"
 #Credentials
 #consumer key,consumer secret key,access token,access secret
-ckey = '' #your consumer key
-csecret = '' #your consumer secret key
-atoken = '' #your access token key
-asecret = '' #Your access secret key
-
+ckey = ''
+csecret = ''
+atoken = ''
+asecret = ''
+queue = deque([])
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 api = tweepy.API(auth)
 
 #Add User Name in place of of the tweet you want to analyse Below.
-user = '@Nispand14'
-
+user = '@Being_Humor'
 #Add tweet id of the tweet you want to analyse Below.
-id= 793126045172064256
+id= 794045925756981248
 temp_id = id
 ids = []
 data = api.get_status(id)
 tweet_data = {'tweet_id':id,'tweet_text':data.text,'author_id':data.user.screen_name,'replied_to_user':data.in_reply_to_screen_name,'reply_to_tweet':data.in_reply_to_status_id_str}
 root = Tweet(tweet_data)
 status = get_all_child(root)
-childs = root.get_child()
-for child in childs:
-    get_all_child(child)
+queue.append(root)
+while(queue):
+    next = queue.popleft()
+    childs = next.get_child()
+    for child in childs:
+        get_all_child(child)
+        queue.append(child)
+    next.visited = True
 
-pickle.dump(root,open("Output.p","wb"))
+pickle.dump(root,open("Outputtest.p","wb"))
 tweet_list = ['']
 
 

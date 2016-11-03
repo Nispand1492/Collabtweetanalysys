@@ -2,7 +2,7 @@ class Tweet :
     reply_count = 0
     def __init__(self,tweet_data):
         self.tweet_data = tweet_data
-        self.child_obj = []
+        self.child_obj = None
         self.visited = False
 
     def add_child(self,childs):
