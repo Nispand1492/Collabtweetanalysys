@@ -1,6 +1,6 @@
 ## Collabrative Tweets
 
-This Example Returns Tweet Class Object which contains all of its replies upto level 2 on the tweet in the form of a tree.
+This Example Returns Tweet Class Object which contains all of its replies upto level- n on the tweet in the form of a tree.
 
 ## Input
 In the tweet_prac.py file.
